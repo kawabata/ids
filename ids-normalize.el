@@ -127,10 +127,8 @@ Returns a list of IDS string."
     (ids-normalize-to-strings ids-trees)))
 
 (defun ids-normalize-to-strings (ids-trees)
-  "Stringnize IDS-TREES."
-  (mapcar (lambda (ids-tree)
-              (apply 'string (-flatten ids-tree)))
-            ids-trees))
+  "Convert IDS-TREES to a list of String."
+  (--map (apply 'string (-flatten it)) ids-trees))
 
 (provide 'ids-normalize)
 ;;; ids-normalize.el ends here

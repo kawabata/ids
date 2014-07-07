@@ -1,4 +1,4 @@
-;;; ids-equiv.el ---                               -*- lexical-binding: t; -*-
+;;; ids-equiv.el --- IDS character equivalence tool -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2014  KAWABATA, Taichi
 
@@ -27,8 +27,9 @@
 (setq
   ids-canonicals
   ;; Characters can be canonicalized when:
-  ;; (1) characters can be equally decomposed (e.g. "土" "士")
-  ;; (2) Counterpart pairs can not be decomposed furthermore (e.g. "八" e.g. "丷")
+  ;; (1) characters can be equally decomposed (e.g. "土 vs. 士")
+  ;; (2) Counterpart pairs can not be decomposed furthermore (e.g. "八 vs. 丷")
+  ;; (3) Character may contain equivalent character inside. (e.g. "大 vs. 犬")
   '(
     ("壬" "𡈼") ; [1]
     ("土" "士") ; [1a] [寺]CT, [吉𠮷],[壮-壮]
@@ -200,10 +201,6 @@
     ("网" "𦉳") ; [178-11]
     ("睿" "𥈠") ; [179a] 㲊䜜
     ;; [180]
-    ("荆" "荊") ; [181]
-    ("臥" "卧") ; [187b]
-    ("擧" "𦦙") ; [188]
-    ("舍" "舎") ; [194]
     ("手" "龵") ; 掰
     ("乑" "") ; [聚]
     ("歹" "歺") ; 殩 (𥹏vs粲)
@@ -397,6 +394,11 @@
     ("𠦂" "⿱⿲𠄠丨𠄠十") ; [110a] 噑-噑
     ("直" "⿱匕⿺𠃊目") ; [埴-埴]
     ("果" "⿻𦥑木") ; [巢-巢]
+
+    ("荆" "荊") ; [181]
+    ("臥" "卧") ; [187b]
+    ("擧" "𦦙") ; [188]
+    ("舍" "舎") ; [194]
 
     ("了" "𠄎") ;
     ("乙" "乚") ;

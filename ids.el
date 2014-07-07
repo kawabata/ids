@@ -26,6 +26,8 @@
 
 (require 'dash)
 
+(declare-function ids-debug "ids-debug")
+
 (defun ids-forward-char ()
   "If there is an IDS at the point in buffer, forward the point to next.
 Return the IDS tree structure."

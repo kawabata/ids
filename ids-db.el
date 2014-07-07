@@ -1,4 +1,4 @@
-;;; ids-db.el ---                                    -*- lexical-binding: t; -*-
+;;; ids-db.el --- IDS Database Management -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2014  KAWABATA, Taichi
 
@@ -24,7 +24,6 @@
 
 ;;; Code:
 
-(require 'persistent-soft)
 (require 'ids-normalize)
 (require 'ids-equiv)
 
@@ -35,8 +34,8 @@
                             load-file-name
                             buffer-file-name))))
 
-(defvar ids-table nil
-  "IDS table.")
+(defvar ids-table nil "IDS table.")
+(defvar ids-db-count 0)
 
 (defun ids--addhash (key value table)
   "Add to KEY a VALUE in table TABLE."
@@ -48,7 +47,7 @@
 (defun ids-db-init ()
   "Initialize IDS table."
   (interactive)
-  ;;(persistent-soft-flush "ids")
+  (message "Now initializing...")
   (setq ids-canonical-table
         (let ((table (make-hash-table :test 'equal)))
           (dolist (item ids-canonicals)
@@ -97,7 +96,6 @@
                                     'ids-normalize-structure val)) table))
                    ids-table)
           table))
-  (ids-debug "ids-normalize-table set")
   (setq ids-reverse-table
         (let ((table (make-hash-table :test 'equal)))
           (maphash (lambda (key val)
@@ -105,7 +103,6 @@
                        (ids--addhash ids key table)))
                    ids-normalize-table)
           table))
-  (ids-debug "ids-reverse-table set")
   (setq ids-db-count 0)
   (while (ids-db-renormalize))
   (message "init done."))
@@ -144,21 +141,6 @@ Return t if table is actually changed."
     (incf ids-db-count)
     flag))
 
-(defun ids-db-save ()
-  (interactive)
-  (persistent-soft-store 'ids-table ids-table "ids")
-  (persistent-soft-store 'ids-tables
-                         (cons ids-normalize-table ids-reverse-table) "ids")
-  (message "saved."))
-
-(defun ids-db-load ()
-  (interactive)
-  (setq ids-table (persistent-soft-fetch 'ids-table "ids"))
-  (let ((ids-tables
-         (persistent-soft-fetch 'ids-tables "ids")))
-    (setq ids-normalize-table (car ids-tables))
-    (setq ids-reverse-table (cdr ids-tables)))
-  (message "loaded."))
-
 (provide 'ids-db)
+
 ;;; ids-db.el ends here
