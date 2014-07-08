@@ -138,7 +138,7 @@ Return t if table is actually changed."
                      ids-normalize-table)
             table))
     (message "renormalize done (%d)." ids-db-count)
-    (incf ids-db-count)
+    (cl-incf ids-db-count)
     flag))
 
 (provide 'ids-db)

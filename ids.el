@@ -1,4 +1,4 @@
-;;; ids.el --- IDS processing utilities -*- lexical-binding: t; -*-
+;;; ids.el --- IDS (Ideographic Description Sequence) processing utilities -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2014 KAWABATA, Taichi
 
@@ -20,7 +20,7 @@
 
 ;;; Commentary:
 
-;; Basic functions for IDS processing
+;; Basic functions for IDS (Ideographic Description Sequence) processing
 
 ;;; Code:
 
