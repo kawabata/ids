@@ -39,7 +39,7 @@
   (should (-reduce
            '-intersection
            `(,(ids-normalize "⿱⿳士冖王心")
-             ,(ids-normalize "⿱志")))))
+             ,(ids-normalize "⿱⿳士冖一志")))))
 
 (ert-deftest ids-normalize-all ()
   (should (-reduce
