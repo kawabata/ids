@@ -24,15 +24,10 @@
 
 ;;; Code:
 
+(require 'ids-edit) ; external library
+
 (require 'ids-normalize)
 (require 'ids-equiv)
-
-(defvar ids-file
-  (expand-file-name
-   "ids.txt"
-   (file-name-directory (or byte-compile-current-file
-                            load-file-name
-                            buffer-file-name))))
 
 (defvar ids-table nil "IDS table.")
 (defvar ids-db-count 0)
@@ -57,26 +52,7 @@
               (puthash char (car item) table)))
           table))
   (setq ids-table
-        (let ((table (make-hash-table :test 'equal)))
-          (unless (file-exists-p ids-file) (error "Data file not found!"))
-          (with-temp-buffer
-            (insert-file-contents ids-file)
-            ;; Convert Big5 EUDC to Unicode.
-            (while (re-search-forward
-                    "&CDP-\\(..\\)\\(..\\);" nil t)
-              (let* ((x (string-to-number (match-string 1) 16))
-                     (y (string-to-number (match-string 2) 16))
-                     (x (+ (* (- x #x81) 157)
-                           (if (< y 129) (- y 64) (- y 98))
-                           #xeeb8)))
-                (replace-match (char-to-string x))))
-            (goto-char (point-min))
-            (while (re-search-forward "\\[.+?\\]" nil t) (replace-match ""))
-            (goto-char (point-min))
-            (while (re-search-forward "^[UC].+?	\\(.\\)	\\(.+\\)" nil t)
-              (let* ((char (string-to-char (match-string 1)))
-                     (idses (split-string (match-string 2))))
-                (puthash char idses table))))
+        (let ((table (copy-hash-table ids-edit-table)))
           ;; special equivalnet chars and IDSes.
           (dolist (item ids-equivalents)
             (let ((single-chars (--filter (= 1 (length it)) item)))
@@ -140,6 +116,8 @@ Return t if table is actually changed."
     (message "renormalize done (%d)." ids-db-count)
     (cl-incf ids-db-count)
     flag))
+
+(ids-db-init)
 
 (provide 'ids-db)
 
