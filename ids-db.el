@@ -30,8 +30,11 @@
 
 (eval-when-compile
 
+  (require 'cl)
+
   (defvar ids-table nil)
   (defvar ids-db-count 0)
+  (defvar ids-db-no-init nil)
 
   (defvar normalize-table nil)
   (defvar reverse-table nil)
@@ -116,7 +119,11 @@ Return t if table is actually changed."
       (cl-incf ids-db-count)
       flag))
 
-  (ids-db-init)
+  (unless (and ids-normalize-table
+               ids-reverse-table
+               ids-canonical-table
+               ids-db-no-init)
+    (ids-db-init))
   )
 
 (defvar ids-normalize-table
