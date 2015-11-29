@@ -25,12 +25,11 @@
 ;;; Code:
 
 (require 'ids)
-(require 'dash)
 
 ;; following variables are initialized by ids-db.el
-(defvar ids-normalize-table nil)
-(defvar ids-reverse-table nil)
-(defvar ids-canonical-table nil)
+(defvar ids-normalize-table)
+(defvar ids-reverse-table)
+(defvar ids-canonical-table)
 
 (defun ids-normalize-structure (ids)
   "Normalize IDS string.
@@ -131,4 +130,5 @@ Returns a list of IDS string."
   (--map (apply 'string (-flatten it)) ids-trees))
 
 (provide 'ids-normalize)
+
 ;;; ids-normalize.el ends here
