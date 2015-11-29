@@ -20,11 +20,13 @@
 
 ;;; Commentary:
 
-;; Construct IDS Database.
+;; Construct Normalized IDS Database from IDS original data contained
+;; in `ids-edit' tool.
 
 ;;; Code:
 
-(require 'ids-edit)
+(require 'ids-edit) ; external library
+
 (require 'ids-equiv)
 (require 'ids-normalize)
 
@@ -37,7 +39,7 @@
   (defvar ids-db-no-init nil)
 
   (defvar ids-normalize-table nil)
-  (defvar ids-ids-reverse-table nil)
+  (defvar ids-reverse-table nil)
   (defvar ids-canonical-table nil)
 
   (defun ids-db-init ()
