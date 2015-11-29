@@ -119,9 +119,9 @@ Return t if table is actually changed."
       (cl-incf ids-db-count)
       flag))
 
-  (unless (and ids-normalize-table
-               ids-reverse-table
-               ids-canonical-table
+  (unless (and normalize-table
+               reverse-table
+               canonical-table
                ids-db-no-init)
     (ids-db-init))
   )
