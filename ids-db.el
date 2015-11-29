@@ -36,15 +36,15 @@
   (defvar ids-db-count 0)
   (defvar ids-db-no-init nil)
 
-  (defvar normalize-table nil)
-  (defvar reverse-table nil)
-  (defvar canonical-table nil)
+  (defvar ids-normalize-table nil)
+  (defvar ids-ids-reverse-table nil)
+  (defvar ids-canonical-table nil)
 
   (defun ids-db-init ()
     "Initialize IDS table."
     (interactive)
     (message "Now initializing...")
-    (setq canonical-table
+    (setq ids-canonical-table
           (let ((table (make-hash-table :test 'equal)))
             (dolist (item ids-canonicals)
               (setq item (mapcar 'string-to-char item))
@@ -59,13 +59,13 @@
               (let ((single-chars (--filter (= 1 (length it)) item)))
                 (dolist (single-char single-chars)
                   (dolist (char item)
-                    (when (gethash char canonical-table)
+                    (when (gethash char ids-canonical-table)
                       (error "Canonical Conflict! %c" char))
                     (unless (equal single-char char)
                       (pushnew char
                                (gethash (string-to-char single-char) table)))))))
             table))
-    (setq normalize-table
+    (setq ids-normalize-table
           (let ((table (make-hash-table :test 'equal)))
             (maphash (lambda (key val)
                        (puthash key (mapcar
@@ -74,19 +74,19 @@
                                       'ids-normalize-structure val)) table))
                      ids-table)
             table))
-    (setq reverse-table
+    (setq ids-reverse-table
           (let ((table (make-hash-table :test 'equal)))
             (maphash (lambda (key val)
                        (dolist (ids val)
                          (pushnew key (gethash ids table))))
-                     normalize-table)
+                     ids-normalize-table)
             table))
     (setq ids-db-count 0)
     (while (ids-db-renormalize))
     (message "init done."))
 
   (defun ids-db-renormalize ()
-    "Re-normalize `normalize-table'.
+    "Re-normalize `ids-normalize-table'.
 Return t if table is actually changed."
     (interactive)
     (let (flag)
@@ -105,37 +105,37 @@ Return t if table is actually changed."
                    trees))))
            (when renewed-flag
              (setq flag t)
-             (puthash char (nconc chars new-trees ) normalize-table))))
-       normalize-table)
+             (puthash char (nconc chars new-trees ) ids-normalize-table))))
+       ids-normalize-table)
       ;; making IDS->char table.
-      (setq reverse-table
+      (setq ids-reverse-table
             (let ((table (make-hash-table :test 'equal)))
               (maphash (lambda (key val)
                          (dolist (ids val)
                            (pushnew key (gethash ids table))))
-                       normalize-table)
+                       ids-normalize-table)
               table))
       (message "renormalize done (%d)." ids-db-count)
       (cl-incf ids-db-count)
       flag))
 
-  (unless (and normalize-table
-               reverse-table
-               canonical-table
+  (unless (and ids-normalize-table
+               ids-reverse-table
+               ids-canonical-table
                ids-db-no-init)
     (ids-db-init))
   )
 
 (defvar ids-normalize-table
-  (eval-when-compile normalize-table)
+  (eval-when-compile ids-normalize-table)
   "Normalized table of character to IDSes.")
 
 (defvar ids-reverse-table
-  (eval-when-compile reverse-table)
+  (eval-when-compile ids-reverse-table)
   "Normalized table of IDS to characters.")
 
 (defvar ids-canonical-table
-  (eval-when-compile canonical-table)
+  (eval-when-compile ids-canonical-table)
   "Table of characters to be canonicalized.")
 
 (provide 'ids-db)
