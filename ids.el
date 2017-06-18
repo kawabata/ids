@@ -62,5 +62,17 @@ Return the IDS tree structure."
     (goto-char (point-min))
     (ids-forward-char)))
 
+(defsubst ids-idc (ids)
+  (if (listp ids) (car ids)))
+
+(defsubst ids-left (ids)
+  (if (listp ids) (cadr ids)))
+
+(defsubst ids-center (ids)
+  (if (and (listp ids) (= 4 (length ids))) (caddr ids)))
+
+(defsubst ids-right (ids)
+  (if (listp ids) (car (last ids))))
+
 (provide 'ids)
 ;;; ids.el ends here
